@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>New Year Countdown</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <!-- Ubuntu font -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Ubuntu:ital,wght@0,500&display=swap" rel="stylesheet">
+
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      background: #000;
+      font-family: "Ubuntu", sans-serif;
+      font-weight: 500;
+    }
+
+    .container {
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 32px;
+    }
+
+    #countdown {
+      display: flex;
+      align-items: center;
+      font-size: 120px;
+      line-height: 1;
+      text-align: center;
+    }
+
+    .time {
+      min-width: 2ch;
+      color: #ffffff;   /* white time */
+      opacity: 1;
+    }
+
+    .colon {
+      margin: 0 32px;
+      color: #ffffff;   /* white dots */
+      opacity: 1;
+    }
+
+    .slider {
+      width: 320px;
+    }
+
+    input[type="range"] {
+      width: 100%;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div id="countdown">
+      <span class="time" id="hours">00</span>
+      <span class="colon">:</span>
+      <span class="time" id="minutes">00</span>
+      <span class="colon">:</span>
+      <span class="time" id="seconds">00</span>
+    </div>
+
+    <div class="slider">
+      <input type="range" min="40" max="600" value="120" id="sizeSlider">
+    </div>
+  </div>
+
+  <script>
+    const hoursEl = document.getElementById("hours");
+    const minutesEl = document.getElementById("minutes");
+    const secondsEl = document.getElementById("seconds");
+    const countdownEl = document.getElementById("countdown");
+    const sizeSlider = document.getElementById("sizeSlider");
+
+    function getNextNewYear() {
+      const now = new Date();
+      return new Date(now.getFullYear() + 1, 0, 1, 0, 0, 0);
+    }
+
+    let targetDate = getNextNewYear();
+
+    function updateCountdown() {
+      const now = new Date();
+      const diff = targetDate - now;
+
+      if (diff <= 0) {
+        targetDate = getNextNewYear();
+        return;
+      }
+
+      const totalHours = Math.floor(diff / (1000 * 60 * 60));
+      const minutes = Math.floor((diff / (1000 * 60)) % 60);
+      const seconds = Math.floor((diff / 1000) % 60);
+
+      hoursEl.textContent = String(totalHours).padStart(2, "0");
+      minutesEl.textContent = String(minutes).padStart(2, "0");
+      secondsEl.textContent = String(seconds).padStart(2, "0");
+    }
+
+    sizeSlider.addEventListener("input", () => {
+      countdownEl.style.fontSize = sizeSlider.value + "px";
+    });
+
+    updateCountdown();
+    setInterval(updateCountdown, 1000);
+  </script>
+</body>
+</html>
