@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>New Year Countdown</title>
+  <title>UK Clock</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
   <!-- Ubuntu font -->
@@ -23,13 +23,13 @@
     .container {
       height: 100%;
       display: flex;
-      flex-direction: column;
       align-items: center;
       justify-content: center;
+      flex-direction: column;
       gap: 32px;
     }
 
-    #countdown {
+    #clock {
       display: flex;
       align-items: center;
       font-size: 120px;
@@ -39,14 +39,12 @@
 
     .time {
       min-width: 2ch;
-      color: #ffffff;   /* white time */
-      opacity: 1;
+      color: #ffffff;
     }
 
     .colon {
       margin: 0 32px;
-      color: #ffffff;   /* white dots */
-      opacity: 1;
+      color: #ffffff;
     }
 
     .slider {
@@ -60,7 +58,7 @@
 </head>
 <body>
   <div class="container">
-    <div id="countdown">
+    <div id="clock">
       <span class="time" id="hours">00</span>
       <span class="colon">:</span>
       <span class="time" id="minutes">00</span>
@@ -77,40 +75,29 @@
     const hoursEl = document.getElementById("hours");
     const minutesEl = document.getElementById("minutes");
     const secondsEl = document.getElementById("seconds");
-    const countdownEl = document.getElementById("countdown");
+    const clockEl = document.getElementById("clock");
     const sizeSlider = document.getElementById("sizeSlider");
 
-    function getNextNewYear() {
-      const now = new Date();
-      return new Date(now.getFullYear() + 1, 0, 1, 0, 0, 0);
-    }
+    function updateClock() {
+      const now = new Date(
+        new Date().toLocaleString("en-GB", { timeZone: "Europe/London" })
+      );
 
-    let targetDate = getNextNewYear();
+      const hours = now.getHours();
+      const minutes = now.getMinutes();
+      const seconds = now.getSeconds();
 
-    function updateCountdown() {
-      const now = new Date();
-      const diff = targetDate - now;
-
-      if (diff <= 0) {
-        targetDate = getNextNewYear();
-        return;
-      }
-
-      const totalHours = Math.floor(diff / (1000 * 60 * 60));
-      const minutes = Math.floor((diff / (1000 * 60)) % 60);
-      const seconds = Math.floor((diff / 1000) % 60);
-
-      hoursEl.textContent = String(totalHours).padStart(2, "0");
+      hoursEl.textContent = String(hours).padStart(2, "0");
       minutesEl.textContent = String(minutes).padStart(2, "0");
       secondsEl.textContent = String(seconds).padStart(2, "0");
     }
 
     sizeSlider.addEventListener("input", () => {
-      countdownEl.style.fontSize = sizeSlider.value + "px";
+      clockEl.style.fontSize = sizeSlider.value + "px";
     });
 
-    updateCountdown();
-    setInterval(updateCountdown, 1000);
+    updateClock();
+    setInterval(updateClock, 1000);
   </script>
 </body>
 </html>
